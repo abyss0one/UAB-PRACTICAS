@@ -1,16 +1,46 @@
 #Imprimir el menu en pantalla
 menu(){
-	echo "1. Opcio 1."
-	echo "2. Opcio 2."
-	echo "3. Opcio 3."
+	echo "1. Recomanació ràpida"
+	echo "2. Llistar per any"
+	echo "3. Llistar per rating"
+	echo "4. Sortir"
 }
 
-#Imprimir el contenido de cada opcion
-mostrar_opcion(){
+#Imprimir "Recomanació ràpida"
+recomanacio_rapida(){
+	#grep -u netflix.csv > datos1.txt
 	clear
-	echo "La opcio $1 esta en desenvolupament"
-	sleep 1
+	num1=$((( $RANDOM % 1001 )+1 ))
+	tail -$num1 netflix.csv | head -1 > datos.txt
+	cut -d',' -f1 datos.txt
+	nom=$( cut -d',' -f1 datos.txt )
+	any=$( cut -d',' -f5 datos.txt )
+	rating=$( cut -d',' -f2 datos.txt )
+	desc=$( cut -d',' -f3 datos.txt )
+	echo "--------------------------------------------------"
+	echo " Recomanació ràpida                               "
+	echo "--------------------------------------------------"
+    echo "                                                  "
+	echo "$nom , $any"
+	echo "$rating"
+	echo "$desc"
+	sleep 2
 }
+
+#Imprimir 
+llistar_per_any(){
+	clear
+	#grep -u netflix.csv > datos1.txt
+	echo "--------------------------------------------------"
+	echo " Llistat per any"
+	echo "--------------------------------------------------"
+	echo "Any : "
+	read any
+	grep $any netflix.csv | cut -d',' -f1,5 > datos.txt
+	less datos.txt
+}
+
+
 
 on=true
 while $on
@@ -20,14 +50,22 @@ do
 	read opc
 	case $opc in 
 		1)
-			mostrar_opcion $opc
+			recomanacio_rapida
 		;;
 		2)
-			mostrar_opcion $opc
+			llistar_per_any
 		;;
 		3)
 			clear
-			echo "Adios"
+			echo "En desenvolupament"
+			sleep 2
+			clear
+		;;
+		4)
+			clear
+			echo "Adéu"
+			sleep 0.5
+			clear
 			on=false
 		;;
 		*)
