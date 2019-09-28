@@ -55,6 +55,30 @@ less datos.txt
 }
 
 #Conseguir el programa/peli
+opc_ordre_llista(){
+clear
+echo "1. Endreçar de major a menor "
+echo "2. Endreçar de menor a major"
+read num3
+clear
+case $num3 in
+	1)	
+		sort -k3 -nr -t',' datos2.txt > datos3.txt
+		clear
+		echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
+		echo "Per sortir presiona Q."
+		sleep 5
+		less datos3.txt
+	;;
+	2)
+		echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
+		echo "Per sortir presiona Q."
+		sleep 5
+		less datos2.txt
+		;;
+		*)
+	esac
+}
 
 #Imprimir "Llistar per rating"
 llistar_per_rating(){
@@ -65,19 +89,60 @@ do
 	echo "--------------------------------------------------"
 	echo " Llistat per rating"
 	echo "--------------------------------------------------"
-	echo "Nombre d'estrelles (1-5) :"
+	echo " 1. [     *     ]"
+	echo " 2. [    * *    ]"
+	echo " 3. [   * * *   ]"
+	echo " 4. [  * * * *  ]"
+	echo " 5. [ * * * * * ]"
+	echo " 6. Sortir"
 	read num2
 	case $num2 in
 		1)
-			cut -d',' -f1,5,6 datos1.txt > datos2.txt
+			clear
+			sort -k6 -t',' datos1.txt
+			clear
+			cut -d',' -f1,5,6 datos1.txt > datos.txt
+			clear
+			grep "[5-6][0-9]$" datos.txt | grep -v "[6][5-9]$" | sort -k3 -t',' > datos2.txt
+			opc_ordre_llista
 		;;
 		2)
+			sort -k6 -t',' datos1.txt
+			clear
+			cut -d',' -f1,5,6 datos1.txt > datos.txt 
+			clear	
+			grep "[6-7][0-9]$" datos.txt | grep -v "[6][0-4]$" | grep -v "[7][5-9]$" | sort -k3 -t',' > datos2.txt
+			opc_ordre_llista
 		;;
 		3)
+			sort -k6 -t',' datos1.txt
+			clear
+			cut -d',' -f1,5,6 datos1.txt > datos.txt
+			clear
+			grep "[7-8][0-9]$" datos.txt | grep -v "[7][0-4]$" | grep -v "[8][5-9]$" | sort -k3 -t',' > datos2.txt
+			opc_ordre_llista
 		;;
 		4)
+			sort -k6 -t',' datos1.txt
+			clear
+			cut -d',' -f1,5,6 datos1.txt > datos.txt
+			clear
+			grep "[8-9][0-9]$" datos.txt | grep -v "[8][0-4]$" | grep -v "[9][5-9]$" | sort -k3 -t',' > datos2.txt
+			opc_ordre_llista
 		;;
 		5)
+			sort -k6 -t',' datos1.txt
+			clear
+			cut -d',' -f1,5,6 datos1.txt > datos.txt
+			clear
+			grep "[9][5-9]$" datos.txt | sort -k3 -t',' > datos2.txt
+			opc_ordre_llista
+		;;
+		6)
+			clear
+			echo "Sortint"
+			sleep 1
+			on2=false
 		;;
 		*)
 			clear
