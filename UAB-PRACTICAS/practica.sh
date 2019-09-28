@@ -47,10 +47,10 @@ echo " Llistat per any"
 echo "--------------------------------------------------"
 echo "Any : "
 read any1
-grep $any1 datos1.txt | cut -d',' -f1,5 > datos.txt
+grep $any1 datos1.txt | cut -d',' -f1,2 > datos.txt
 echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
 echo "Per sortir presiona Q."
-sleep 5q
+sleep 5
 less datos.txt
 }
 
