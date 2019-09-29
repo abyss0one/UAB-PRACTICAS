@@ -1,42 +1,73 @@
-Secret of the Wings,2012,65
-The Real Ghostbusters,1990,65
-30 Rock,2012,66
-Crossing Lines,2015,66
-Justice League,2003,66
-An American Tail,1986,67
-An Extremely Goofy Movie,1999,67
-LEGO Ninjago: Masters of Spinjitzu,2015,67
-Pocoyo,2007,67
-10 Things I Hate About You,1999,68
-Annie,1982,68
-Life in Pieces,2015,68
-Super Why!,2015,68
-Touch,2012,68
-Luther,2015,69
-Skin Wars,2016,69
-The Carmichael Show,2016,69
-The Great Gilly Hopkins,2016,69
-D2: The Mighty Ducks,1994,70
-FernGully: The Last Rainforest,1992,70
-Little Einsteins,2007,70
-Madam Secretary,2016,70
-Paddington,2014,70
-All Hail King Julien,2016,71
-Baby's Day Out,1994,71
-Louis C.K. 2017,2017,71
-The Little Prince,2015,71
-Young Justice,2012,71
-Animaniacs,1997,72
-Dawn of the Croods,2017,72
-Open Season: Scared Silly,2015,72
-Mighty Morphin Power Rangers,2010,73
-Raising Hope,2013,73
-The Fosters,2016,73
-The Killing,2014,73
-Cars Toons: Mater's Tall Tales,2010,74
-H2O: Just Add Water,2009,74
-Heavyweights,1995,74
-PokÃ©mon: Indigo League,2000,74
-Ratchet and Clank,2016,74
-Schitt's Creek,2016,74
-The Originals,2016,74
+Barbie Life in the Dreamhouse,2012,85
+Burn Notice,2013,85
+Gotham,2016,85
+Heartland,2015,85
+Lab Rats,2016,85
+Lilo & Stitch 2: Stitch Has A Glitch,2005,85
+Mulan 2,2004,85
+Weeds,2012,85
+Bordertown,2016,86
+Grease,1978,86
+Leverage,2012,86
+Scooby-Doo,2002,86
+The Little Rascals,1994,86
+Travelers,2016,86
+Breakout Kings,2012,88
+Dragons: Race to the Edge,2017,88
+Forensic Files,2011,88
+Goosebumps,1998,88
+Jessie,2015,88
+Naruto,2008,88
+Private Practice,2012,88
+Quantico,2016,88
+The Cleveland Show,2012,88
+Lie to Me,2010,89
+Marvel's Agents of S.H.I.E.L.D.,2016,89
+Phineas and Ferb,2012,89
+Sand Castle,2017,89
+That '70s Show,2005,89
+The Magicians,2016,89
+Twilight,2008,89
+American Horror Story,2016,90
+Charmed,2005,90
+Fuller House,2016,90
+Goosebumps,2015,90
+Grace and Frankie,2017,90
+One Tree Hill,2011,90
+Stranger Things,2016,90
+Corpse Bride,2005,91
+Gilmore Girls,2006,91
+House of Cards,2016,91
+It's Always Sunny in Philadelphia,2016,91
+Jane The Virgin,2016,91
+Kung Fu Panda,2008,91
+New Girl,2016,91
+Sausage Party,2016,91
+The Pacifier,2005,91
+The Road to El Dorado,2000,91
+The Vampire Diaries,2017,91
+Chicken Little,2005,92
+Glee,2015,92
+Kung Fu Panda 3,2016,92
+Longmire,2016,92
+Sandy Wexler,2017,92
+Scandal,2016,92
+The Angry Birds Movie,2016,92
+The Client List,2013,92
+Anastasia,1997,93
+Blank Check,1994,93
+Chewing Gum,2017,93
+Hotel Transylvania 2,2015,93
+Person of Interest,2016,93
+Pete's Dragon,2016,93
+Star Wars: The Clone Wars,2014,93
+The Night Shift,2015,93
+White Collar,2014,93
+Bee Movie,2007,94
+Dave Chappelle,2017,94
+Girlboss,2017,94
+Home,2015,94
+How I Met Your Mother,2014,94
+Narcos,2016,94
+Parks and Recreation,2015,94
+The Great British Baking Show,2016,94

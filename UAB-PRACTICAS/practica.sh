@@ -67,7 +67,7 @@ case $num3 in
 		#Aqui endreçem les opcions de mes rating a menys 
 		sort -k3 -nr -t',' datos2.txt > datos3.txt
 		clear
-		cut -d, -f1,2,3 datos3.txt > datos.txt
+		cut -d, -f1,2 datos3.txt > datos.txt
 		clear
 		cat rating$1.txt > rating.txt
 		paste -d, rating.txt datos.txt | grep "[0-9]$" > datos3.txt
@@ -78,7 +78,7 @@ case $num3 in
 	;;
 	2)
 		#Aqui endreçem les opcions de menys rating a mes
-		cut -d, -f1,2,3 datos2.txt > datos.txt
+		cut -d, -f1,2 datos2.txt > datos.txt
 		clear
 		cat rating$1.txt > rating.txt
 		paste -d, rating.txt datos.txt | grep "[0-9]$" > datos3.txt
