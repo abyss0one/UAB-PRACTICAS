@@ -64,6 +64,7 @@ read num3
 clear
 case $num3 in
 	1)
+		#Aqui endreçem les opcions de mes rating a menys 
 		sort -k3 -nr -t',' datos2.txt > datos3.txt
 		clear
 		cut -d, -f1,2,3 datos3.txt > datos.txt
@@ -76,7 +77,7 @@ case $num3 in
 		less datos3.txt
 	;;
 	2)
-		
+		#Aqui endreçem les opcions de menys rating a mes
 		cut -d, -f1,2,3 datos2.txt > datos.txt
 		clear
 		cat rating$1.txt > rating.txt
