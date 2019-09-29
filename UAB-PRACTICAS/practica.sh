@@ -48,6 +48,7 @@ echo "--------------------------------------------------"
 echo "Any : "
 read any1
 grep $any1 datos1.txt | cut -d',' -f1,2 > datos.txt
+clear
 echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
 echo "Per sortir presiona Q."
 sleep 5
@@ -62,21 +63,33 @@ echo "2. Endreçar de menor a major"
 read num3
 clear
 case $num3 in
-	1)	
+	1)
 		sort -k3 -nr -t',' datos2.txt > datos3.txt
 		clear
+		cut -d, -f1,2,3 datos3.txt > datos.txt
+		clear
+		cat rating$1.txt > rating.txt
+		paste -d, rating.txt datos.txt | grep "[0-9]$" > datos3.txt
 		echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
 		echo "Per sortir presiona Q."
 		sleep 5
 		less datos3.txt
 	;;
 	2)
+		
+		cut -d, -f1,2,3 datos2.txt > datos.txt
+		clear
+		cat rating$1.txt > rating.txt
+		paste -d, rating.txt datos.txt | grep "[0-9]$" > datos3.txt
 		echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
 		echo "Per sortir presiona Q."
 		sleep 5
-		less datos2.txt
-		;;
-		*)
+		less datos3.txt
+	;;
+	*)
+		clear
+		echo "Error: $num3 no es una opcion valida"
+		sleep 1
 	esac
 }
 
@@ -104,7 +117,7 @@ do
 			cut -d',' -f1,5,6 datos1.txt > datos.txt
 			clear
 			grep "[5-6][0-9]$" datos.txt | grep -v "[6][5-9]$" | sort -k3 -t',' > datos2.txt
-			opc_ordre_llista
+			opc_ordre_llista $num2
 		;;
 		2)
 			sort -k6 -t',' datos1.txt
@@ -112,7 +125,7 @@ do
 			cut -d',' -f1,5,6 datos1.txt > datos.txt 
 			clear	
 			grep "[6-7][0-9]$" datos.txt | grep -v "[6][0-4]$" | grep -v "[7][5-9]$" | sort -k3 -t',' > datos2.txt
-			opc_ordre_llista
+			opc_ordre_llista $num2
 		;;
 		3)
 			sort -k6 -t',' datos1.txt
@@ -120,7 +133,7 @@ do
 			cut -d',' -f1,5,6 datos1.txt > datos.txt
 			clear
 			grep "[7-8][0-9]$" datos.txt | grep -v "[7][0-4]$" | grep -v "[8][5-9]$" | sort -k3 -t',' > datos2.txt
-			opc_ordre_llista
+			opc_ordre_llista $num2
 		;;
 		4)
 			sort -k6 -t',' datos1.txt
@@ -128,7 +141,7 @@ do
 			cut -d',' -f1,5,6 datos1.txt > datos.txt
 			clear
 			grep "[8-9][0-9]$" datos.txt | grep -v "[8][0-4]$" | grep -v "[9][5-9]$" | sort -k3 -t',' > datos2.txt
-			opc_ordre_llista
+			opc_ordre_llista $num2
 		;;
 		5)
 			sort -k6 -t',' datos1.txt
@@ -136,7 +149,7 @@ do
 			cut -d',' -f1,5,6 datos1.txt > datos.txt
 			clear
 			grep "[9][5-9]$" datos.txt | sort -k3 -t',' > datos2.txt
-			opc_ordre_llista
+			opc_ordre_llista $num2
 		;;
 		6)
 			clear

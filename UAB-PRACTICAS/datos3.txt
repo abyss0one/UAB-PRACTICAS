@@ -1,48 +1,42 @@
-13 Reasons Why,2017,99
-The Walking Dead,2015,98
-The Flash,2016,98
-Prison Break,2008,98
-Orange Is the New Black,2016,98
-Once Upon a Time,2016,98
-Marvel's Iron Fist,2017,98
-Lost,2010,98
-Grey's Anatomy,2016,98
-Friends,2003,98
-Finding Dory,2016,98
-Family Guy,2015,98
-Criminal Minds,2016,98
-Zootopia,2016,97
-The Office (U.S.),2012,97
-The Jungle Book,2016,97
-The BFG,2016,97
-The 100,2016,97
-Shameless (U.S.),2016,97
-NCIS,2016,97
-Law & Order: Special Victims Unit,2015,97
-Last Man Standing,2015,97
-Kevin Hart: What Now?,2016,97
-Breaking Bad,2013,97
-Bones,2016,97
-The Blacklist,2016,96
-Pretty Little Liars,2016,96
-Minions,2015,96
-London Has Fallen,2016,96
-Kubo and the Two Strings,2016,96
-Ingobernable,2017,96
-Homeward Bound: The Incredible Journey,1993,96
-Hawaii Five-0,2016,96
-Gossip Girl,2012,96
-Atlantis: The Lost Empire,2001,96
-Arrow,2015,96
-Alice Through the Looking Glass,2016,96
-The Emperor's New Groove,2000,95
-Tarzan,1999,95
-Supernatural,2016,95
-Sherlock,2016,95
-Marvel's Luke Cage,2016,95
-Lilo & Stitch,2002,95
-How to Get Away with Murder,2016,95
-Dexter,2013,95
-Coraline,2009,95
-Blue Bloods,2016,95
-Better Call Saul,2016,95
+[    * *    ],Secret of the Wings,2012,65
+[    * *    ],The Real Ghostbusters,1990,65
+[    * *    ],30 Rock,2012,66
+[    * *    ],Crossing Lines,2015,66
+[    * *    ],Justice League,2003,66
+[    * *    ],An American Tail,1986,67
+[    * *    ],An Extremely Goofy Movie,1999,67
+[    * *    ],LEGO Ninjago: Masters of Spinjitzu,2015,67
+[    * *    ],Pocoyo,2007,67
+[    * *    ],10 Things I Hate About You,1999,68
+[    * *    ],Annie,1982,68
+[    * *    ],Life in Pieces,2015,68
+[    * *    ],Super Why!,2015,68
+[    * *    ],Touch,2012,68
+[    * *    ],Luther,2015,69
+[    * *    ],Skin Wars,2016,69
+[    * *    ],The Carmichael Show,2016,69
+[    * *    ],The Great Gilly Hopkins,2016,69
+[    * *    ],D2: The Mighty Ducks,1994,70
+[    * *    ],FernGully: The Last Rainforest,1992,70
+[    * *    ],Little Einsteins,2007,70
+[    * *    ],Madam Secretary,2016,70
+[    * *    ],Paddington,2014,70
+[    * *    ],All Hail King Julien,2016,71
+[    * *    ],Baby's Day Out,1994,71
+[    * *    ],Louis C.K. 2017,2017,71
+[    * *    ],The Little Prince,2015,71
+[    * *    ],Young Justice,2012,71
+[    * *    ],Animaniacs,1997,72
+[    * *    ],Dawn of the Croods,2017,72
+[    * *    ],Open Season: Scared Silly,2015,72
+[    * *    ],Mighty Morphin Power Rangers,2010,73
+[    * *    ],Raising Hope,2013,73
+[    * *    ],The Fosters,2016,73
+[    * *    ],The Killing,2014,73
+[    * *    ],Cars Toons: Mater's Tall Tales,2010,74
+[    * *    ],H2O: Just Add Water,2009,74
+[    * *    ],Heavyweights,1995,74
+[    * *    ],PokÃ©mon: Indigo League,2000,74
+[    * *    ],Ratchet and Clank,2016,74
+[    * *    ],Schitt's Creek,2016,74
+[    * *    ],The Originals,2016,74
