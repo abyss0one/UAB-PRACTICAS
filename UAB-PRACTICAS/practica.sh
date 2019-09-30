@@ -17,8 +17,6 @@ menu(){
 	echo "|        5. Sortir                     |"
 	echo "|______________________________________|"
 }
-#Treu els repetits de la llista
-sort -u netflix.csv > datos1.txt
 
 #Imprimir "Recomanació ràpida"
 	#A datos.txt esat guardada l'informació del programa/peli que s'ha extret de datos1.txt
@@ -183,7 +181,7 @@ do
 	read opc
 	case $opc in
 		1)
-			modificar_pref
+			modificar_pref $on3
 		;;
 		2)
 		;;
@@ -198,6 +196,9 @@ done
 
 modificar_pref(){
 clear
+on4=true
+while $on4 in
+do
 	echo "Modificar :"
 	echo "1. Any"
 	echo "2. Rating"
@@ -206,19 +207,42 @@ clear
 	read opc
 	case $opc in
 		1)
-			echo "Inici"
-			read any1
-			read any2
+		read -p "Any inicial : " any1
+		read -p "Any final : " any2
+		if [$any2>$any1]
+		then
+			cat datos1.txt > datos.txt
+			while [$any2>=$any1] in
+			do	
+				grep $any2 datos.txt > datos1.txt
+				$any2--
+				
+			done
+		elif
+		then
+			
+		else
+			
+		fi
 		;;
 		2)
 		;;
 		3)
 		;;
 		4)
+			clear
+			echo "Sortint"
+			sleep 1
+			$on4=false
 		;;
 		*)	
 	esac
+done
 }
+
+
+#Treu els repetits de la llista
+sort -u netflix.csv > datos1.txt
 
 #Bucle principal
 #La variable on ens fa entrar i sortir del bucle while
