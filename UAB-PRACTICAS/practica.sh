@@ -13,7 +13,8 @@ menu(){
 	echo "|        1. Recomanació ràpida         |"
 	echo "|        2. Llistar per any            |"
 	echo "|        3. Llistar per rating         |"
-	echo "|        4. Sortir                     |"
+	echo "|        4. Criteris de cerca          |"
+	echo "|        5. Sortir                     |"
 	echo "|______________________________________|"
 }
 #Treu els repetits de la llista
@@ -166,6 +167,58 @@ do
 done
 }
 
+#
+criteris_de_cerca(){
+on3=true
+while $on3
+do
+	clear
+	echo "--------------------------------------------------"
+	echo " Criteris de cerca"
+	echo "--------------------------------------------------"
+	echo " 1. Modificar preferències"
+	echo " 2. Eliminar preferències"
+	echo " 3. Preferències actuals"
+	echo " 4. Sortir"
+	read opc
+	case $opc in
+		1)
+			modificar_pref
+		;;
+		2)
+		;;
+		3)
+		;;
+		4)
+		;;
+		*)
+	esac
+done
+}
+
+modificar_pref(){
+clear
+	echo "Modificar :"
+	echo "1. Any"
+	echo "2. Rating"
+	echo "3. Estrelles"
+	echo "4. Sortir"
+	read opc
+	case $opc in
+		1)
+			echo "Inici"
+			read any1
+			read any2
+		;;
+		2)
+		;;
+		3)
+		;;
+		4)
+		;;
+		*)	
+	esac
+}
 
 #Bucle principal
 #La variable on ens fa entrar i sortir del bucle while
@@ -187,6 +240,9 @@ do
 			
 		;;
 		4)
+			criteris_de_cerca
+		;;
+		5)
 			clear
 			echo "Adeu"
 			sleep 0.15
