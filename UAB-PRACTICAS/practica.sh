@@ -22,7 +22,7 @@ menu(){
 	#A datos.txt esat guardada l'informació del programa/peli que s'ha extret de datos1.txt
 recomanacio_rapida(){
 clear
-num1=$((( $RANDOM % 502 )+1 ))
+num1=$((( $RANDOM % `wc -l < datos1.txt` )+1 ))
 tail -$num1 datos1.txt | head -1 > datos.txt
 nom=$( cut -d',' -f1 datos.txt )
 any=$( cut -d',' -f5 datos.txt )
@@ -46,7 +46,7 @@ echo " Llistat per any"
 echo "--------------------------------------------------"
 echo "Any : "
 read any1
-grep $any1 datos1.txt | cut -d',' -f1,2 > datos.txt
+grep ,$any1, datos1.txt | cut -d',' -f1,2 > datos.txt
 clear
 echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
 echo "Per sortir presiona Q."
@@ -181,13 +181,19 @@ do
 	read opc
 	case $opc in
 		1)
-			modificar_pref $on3
+			modificar_pref 
 		;;
 		2)
+			tail +2 netflix.csv | sort -u > datos1.txt
+			echo 0 > pref.txt
 		;;
 		3)
 		;;
 		4)
+			clear
+			echo "Sortint"
+			sleep 1
+			on3=false
 		;;
 		*)
 	esac
@@ -207,25 +213,33 @@ do
 	read opc
 	case $opc in
 		1)
-		read -p "Any inicial : " any1
-		read -p "Any final : " any2
-		if [$any2>$any1]
-		then
-			cat datos1.txt > datos.txt
-			while [$any2>=$any1] in
-			do	
-				grep $any2 datos.txt > datos1.txt
-				$any2--
-				
+			clear
+			cat datos1.txt > datosPref.txt
+			cat datos1.txt > datos1.txt
+			read -p "Des de : " any1
+			read -p "Fins a : " any2
+			while [ $any1 -le $any2 ]
+			do
+				grep ,$any1, datosPref.txt >> datos1.txt
+				any1=$(($any1+1))
 			done
-		elif
-		then
-			
-		else
-			
-		fi
+			echo 1 > pref.txt
+			less datos1.txt
+			clear
 		;;
 		2)
+			clear
+			cat datos1.txt > datosPref.txt
+			cat datos1.txt > datos1.txt
+			echo "[PG-13, R, TV-14, TV-PG, TV-MA, TV-Y, NR, TV-Y7-FV,UR,G]"
+			read -p "Escriu els ratings que vulguis separats per un espai : " ratings
+			for rat in $ratings
+			do
+				egrep ,$rat, datosPref.txt >> datos1.txt
+			done
+			echo 1 > pref.txt
+			less datos1.txt
+			clear
 		;;
 		3)
 		;;
@@ -233,16 +247,18 @@ do
 			clear
 			echo "Sortint"
 			sleep 1
-			$on4=false
+			on4=false
 		;;
-		*)	
+		*)
 	esac
 done
 }
 
-
-#Treu els repetits de la llista
-sort -u netflix.csv > datos1.txt
+#Escull quina llista utlizar, la modificada(criteris de cerca) o la predeterminada(nomes els arxius unics)
+if [ `cat pref.txt` -eq 0 ] ;
+then
+	tail +2 netflix.csv | sort -u > datos1.txt
+fi
 
 #Bucle principal
 #La variable on ens fa entrar i sortir del bucle while

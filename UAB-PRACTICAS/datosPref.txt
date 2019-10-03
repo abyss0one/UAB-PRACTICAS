@@ -1,0 +1,7 @@
+Air Bud: World Pup,G,General Audiences. Suitable for all ages.,35,2000,,82
+Batched,G,General Audiences. Suitable for all ages.,35,2000,,82
+Chicken Run,G,General Audiences. Suitable for all ages.,35,2000,80,80
+Fantasia 2000,G,General Audiences. Suitable for all ages.,35,2000,,82
+PokÃ©mon: Indigo League,TV-Y,Suitable for all ages.,10,2000,74,80
+The Emperor's New Groove,G,General Audiences. Suitable for all ages.,35,2000,95,80
+The Road to El Dorado,PG,mild thematic material and language,60,2000,91,80
