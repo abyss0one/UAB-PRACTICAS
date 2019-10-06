@@ -1,4 +1,4 @@
-#A datos1.txt estan guardats els noms unics de l'arxiu netflix.csv
+#A netflix_unique.csv estan guardats els noms unics de l'arxiu netflix.csv
 #datos.txt es un arxiu que guarda informació temporal
 #Imprimir el menu en pantalla
 function menu() {
@@ -18,12 +18,17 @@ function menu() {
 	echo "|______________________________________|"
 }
 
+function prompt_less_insctructions() {
+	echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
+	echo "Per sortir presiona Q."
+}
+
 #Imprimir "Recomanació ràpida"
-	#A datos.txt esat guardada l'informació del programa/peli que s'ha extret de datos1.txt
+	#A datos.txt esat guardada l'informació del programa/peli que s'ha extret de netflix_unique.csv
 function recomanacio_rapida() {
 	clear
-	local index=$((( $RANDOM % `wc -l < datos1.txt` )+1 ))
-	local row=$( tail -$index datos1.txt | head -1 )
+	local index=$((( $RANDOM % `wc -l < netflix_unique.csv` )+1 ))
+	local row=$( tail -$index netflix_unique.csv | head -1 )
 	local nom=$( echo $row | cut -d',' -f1 )
 	local any=$( echo $row | cut -d',' -f5 )
 	local rating=$( echo $row | cut -d',' -f2 )
@@ -47,55 +52,78 @@ function llistar_per_any() {
 	local any
 	read -p "Any: " any
 	clear
-	echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
-	echo "Per sortir presiona Q."
+	prompt_less_insctructions
 	sleep 5
-	grep ,$any, datos1.txt | cut -d',' -f1,2 | column -t -s "," | less
+	grep ,$any, netflix_unique.csv | cut -d',' -f1,2 | column -t -s "," | less
 }
+
+function estrelles_per_numero() {
+	local estrelles=" "
+  local remaining=$((5-$1))
+  for i in $( seq 1 $remaining)
+	do
+		estrelles="$estrelles "
+	done
+
+	for i in $( seq 1 $1)
+	do
+		estrelles="$estrelles* "
+	done
+
+  for i in $( seq 1 $remaining)
+  do
+    estrelles="$estrelles "
+  done
+
+	echo "[$estrelles]"
+}
+
 
 #Conseguir el programa/peli
 function opc_ordre_llista() {
+	local series="$1"
+	local rating_num="$2"
+
 	clear
-	echo "1. Endreçar de major a menor "
-	echo "2. Endreçar de menor a major"
-	read num3
+	echo "1. Ordenar de major a menor"
+	echo "2. Ordenar de menor a major"
+	local option
+	read option
+
+	if [ "$option" -ne "1" ] && [ "$option" -ne "2" ];
+	then
+		#clear
+		echo "Error: $option no es una opcion valida"
+		sleep 5
+		return 1
+	fi
+
+	if [ "$option" -eq "1" ];
+	then
+		series=$(echo "$series" | sort -k3 -nr -t',')
+	else
+		series=$(echo "$series" | sort -k3 -n -t',')
+	fi
+
 	clear
-	case $num3 in
-		1)
-			#Aqui endreçem les opcions de mes rating a menys
-			sort -k3 -nr -t',' datos2.txt > datos3.txt
-			clear
-			cut -d, -f1,2 datos3.txt > datos.txt
-			clear
-			cat rating$1.txt > rating.txt
-			paste -d, rating.txt datos.txt | grep "[0-9]$" > datos3.txt
-			echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
-			echo "Per sortir presiona Q."
-			sleep 5
-			less datos3.txt
-		;;
-		2)
-			#Aqui endreçem les opcions de menys rating a mes
-			cut -d, -f1,2 datos2.txt > datos.txt
-			clear
-			cat rating$1.txt > rating.txt
-			paste -d, rating.txt datos.txt | grep "[0-9]$" > datos3.txt
-			echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
-			echo "Per sortir presiona Q."
-			sleep 5
-			less datos3.txt
-		;;
-		*)
-			clear
-			echo "Error: $num3 no es una opcion valida"
-			sleep 1
-		esac
+	local formatted_series=""
+	IFS=$'\n'
+	for serie in $series
+	do
+		local rating=$(echo $serie | cut -d',' -f3)
+		local title=$(echo $serie | cut -d',' -f1,2)
+		local stars=$(estrelles_per_numero $rating_num)
+		formatted_series="$formatted_series"$'\n'"$stars,$title"
+	done
+	prompt_less_insctructions
+	sleep 5
+	echo "$formatted_series" | column -t -s "," | less
 }
 
 #Imprimir "Llistar per rating"
 function llistar_per_rating() {
-	on2=true
-	while $on2
+	local on=true
+	while $on
 	do
 		clear
 		echo "--------------------------------------------------"
@@ -107,60 +135,54 @@ function llistar_per_rating() {
 		echo " 4. [  * * * *  ]"
 		echo " 5. [ * * * * * ]"
 		echo " 6. Sortir"
-		read num2
-		case $num2 in
+		local option min_rating max_rating series
+		series=$(cut -d',' -f1,5,6 netflix_unique.csv)
+		read option
+		case $option in
 			1)
-				clear
-				sort -k6 -t',' datos1.txt
-				clear
-				cut -d',' -f1,5,6 datos1.txt > datos.txt
-				clear
-				grep "[5-6][0-9]$" datos.txt | grep -v "[6][5-9]$" | sort -k3 -t',' > datos2.txt
-				opc_ordre_llista $num2
+				local min_rating=0
+				local max_rating=65
 			;;
 			2)
-				sort -k6 -t',' datos1.txt
-				clear
-				cut -d',' -f1,5,6 datos1.txt > datos.txt
-				clear
-				grep "[6-7][0-9]$" datos.txt | grep -v "[6][0-4]$" | grep -v "[7][5-9]$" | sort -k3 -t',' > datos2.txt
-				opc_ordre_llista $num2
+				local min_rating=65
+				local max_rating=75
 			;;
 			3)
-				sort -k6 -t',' datos1.txt
-				clear
-				cut -d',' -f1,5,6 datos1.txt > datos.txt
-				clear
-				grep "[7-8][0-9]$" datos.txt | grep -v "[7][0-4]$" | grep -v "[8][5-9]$" | sort -k3 -t',' > datos2.txt
-				opc_ordre_llista $num2
+				local min_rating=75
+				local max_rating=85
 			;;
 			4)
-				sort -k6 -t',' datos1.txt
-				clear
-				cut -d',' -f1,5,6 datos1.txt > datos.txt
-				clear
-				grep "[8-9][0-9]$" datos.txt | grep -v "[8][0-4]$" | grep -v "[9][5-9]$" | sort -k3 -t',' > datos2.txt
-				opc_ordre_llista $num2
+				local min_rating=85
+				local max_rating=95
 			;;
 			5)
-				sort -k6 -t',' datos1.txt
-				clear
-				cut -d',' -f1,5,6 datos1.txt > datos.txt
-				clear
-				grep "[9][5-9]$" datos.txt | sort -k3 -t',' > datos2.txt
-				opc_ordre_llista $num2
+				local min_rating=95
+				local max_rating=999
 			;;
 			6)
 				clear
 				echo "Sortint"
 				sleep 1
-				on2=false
+				local on=false
 			;;
 			*)
 				clear
 				echo "Error: $num2 no es una opcion valida"
 				sleep 1
 		esac
+
+		local filtered_series=""
+		IFS=$'\n'
+		for serie in $series
+		do
+			local rating=$( echo $serie | cut -d',' -f3 )
+			if [ ! -z $rating ] && [ $rating -ge $min_rating ] && [ $rating -lt $max_rating ];
+			then
+				filtered_series="$filtered_series"$'\n'"$serie"
+			fi
+		done
+
+		opc_ordre_llista "$filtered_series" "$option"
 	done
 }
 
@@ -183,7 +205,7 @@ function criteris_de_cerca() {
 				modificar_pref
 			;;
 			2)
-				tail +2 netflix.csv | sort -u > datos1.txt
+				tail +2 netflix.csv | sort -u > netflix_unique.csv
 				echo 0 > pref.txt
 			;;
 			3)
@@ -213,31 +235,31 @@ function modificar_pref() {
 		case $opc in
 			1)
 				clear
-				cat datos1.txt > datosPref.txt
-				cat datos1.txt > datos1.txt
+				cat netflix_unique.csv > datosPref.txt
+				cat netflix_unique.csv > netflix_unique.csv
 				read -p "Des de : " any1
 				read -p "Fins a : " any2
 				while [ $any1 -le $any2 ]
 				do
-					grep ,$any1, datosPref.txt >> datos1.txt
+					grep ,$any1, datosPref.txt >> netflix_unique.csv
 					any1=$(($any1+1))
 				done
 				echo 1 > pref.txt
-				less datos1.txt
+				less netflix_unique.csv
 				clear
 			;;
 			2)
 				clear
-				cat datos1.txt > datosPref.txt
-				cat datos1.txt > datos1.txt
+				cat netflix_unique.csv > datosPref.txt
+				cat netflix_unique.csv > netflix_unique.csv
 				echo "[PG-13, R, TV-14, TV-PG, TV-MA, TV-Y, NR, TV-Y7-FV,UR,G]"
 				read -p "Escriu els ratings que vulguis separats per un espai : " ratings
 				for rat in $ratings
 				do
-					egrep ,$rat, datosPref.txt >> datos1.txt
+					egrep ,$rat, datosPref.txt >> netflix_unique.csv
 				done
 				echo 1 > pref.txt
-				less datos1.txt
+				less netflix_unique.csv
 				clear
 			;;
 			3)
@@ -256,7 +278,7 @@ function modificar_pref() {
 #Escull quina llista utlizar, la modificada(criteris de cerca) o la predeterminada(nomes els arxius unics)
 if [ `cat pref.txt` -eq 0 ] ;
 then
-	tail +2 netflix.csv | sort -u > datos1.txt
+	tail +2 netflix.csv | sort -u > netflix_unique.csv
 fi
 
 #Bucle principal
