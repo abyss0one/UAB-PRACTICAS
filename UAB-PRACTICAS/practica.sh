@@ -58,10 +58,13 @@ function llistar_per_any() {
 	echo "--------------------------------------------------"
 	# llegim l'any
 	local any
-	read -p "Any: " any
+	read -p "Introdueix l'any: " any
 	clear
 	prompt_less_insctructions
 	sleep 5
+	# filtrar per any, obtenir les columnes 1 i 2, formatar en columna i fer un less
+	# regex: les linies que acabin per l'any
+	# i dos camps numerics que poden o no tenir un valor, separats per comes
 	grep ",$any,[0-9]*,[0-9]*$" netflix_unique.csv | cut -d',' -f1,2 | column -t -s "," | less
 }
 
