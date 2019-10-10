@@ -131,6 +131,59 @@ function opc_ordre_llista() {
 	echo "$formatted_series" | column -t -s "," | less
 }
 
+function filtrar_per_rating() {
+  local series="$1"
+	local min_rating="$2"
+	local max_rating="$3"
+
+	local filtered_series=""
+	IFS=$'\n'
+	for serie in $series
+	do
+		local rating=$( echo $serie | cut -d',' -f3 )
+		if [ ! -z $rating ] && [ $rating -ge $min_rating ] && [ $rating -lt $max_rating ];
+		then
+			filtered_series="$filtered_series"$'\n'"$serie"
+		fi
+	done
+}
+
+function rating_range_from_stars() {
+	local stars="$1"
+	case $option in
+		1)
+			local min_rating=0
+			local max_rating=65
+		;;
+		2)
+			local min_rating=65
+			local max_rating=75
+		;;
+		3)
+			local min_rating=75
+			local max_rating=85
+		;;
+		4)
+			local min_rating=85
+			local max_rating=95
+		;;
+		5)
+			local min_rating=95
+			local max_rating=999
+		;;
+		6)
+			clear
+			echo "Sortint"
+			sleep 1
+			local on=false
+		;;
+		*)
+			clear
+			echo "Error: $num2 no es una opcion valida"
+			sleep 1
+	esac
+}
+
 #Imprimir "Llistar per rating"
 function llistar_per_rating() {
 	local on=true
@@ -287,10 +340,7 @@ function modificar_pref() {
 }
 
 #Escull quina llista utlizar, la modificada(criteris de cerca) o la predeterminada(nomes els arxius unics)
-if [ `cat pref.txt` -eq 0 ] ;
-then
-	tail +2 netflix.csv | sort -u > netflix_unique.csv
-fi
+tail +2 netflix.csv | sort -u > netflix_unique.csv
 
 #Bucle principal
 #La variable on ens fa entrar i sortir del bucle while
