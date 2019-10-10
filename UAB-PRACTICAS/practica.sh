@@ -18,21 +18,28 @@ function menu() {
 	echo "|______________________________________|"
 }
 
+# aquesta funció mostra les instruccions de la comanda less
 function prompt_less_insctructions() {
 	echo "Utilitza les fletxes ↑ i ↓ per navegar per la llista."
 	echo "Per sortir presiona Q."
 }
 
 #Imprimir "Recomanació ràpida"
-	#A datos.txt esat guardada l'informació del programa/peli que s'ha extret de netflix_unique.csv
 function recomanacio_rapida() {
 	clear
-	local index=$((( $RANDOM % `wc -l < netflix_unique.csv` )+1 ))
+	# escollir número aleatori entre 1 i la longitud del fitxer
+	local index=$(( $RANDOM % $(wc -l < netflix_unique.csv) + 1 ))
+
+	# obtenir la fila a l'index escollit
 	local row=$( tail -$index netflix_unique.csv | head -1 )
+
+	# extreure els camps de la fila
 	local nom=$( echo $row | cut -d',' -f1 )
 	local any=$( echo $row | cut -d',' -f5 )
 	local rating=$( echo $row | cut -d',' -f2 )
 	local desc=$( echo $row | cut -d',' -f3 )
+
+	# mostrar recomanació
 	echo "--------------------------------------------------"
 	echo " Recomanació ràpida                               "
 	echo "--------------------------------------------------"
@@ -49,12 +56,13 @@ function llistar_per_any() {
 	echo "--------------------------------------------------"
 	echo " Llistat per any"
 	echo "--------------------------------------------------"
+	# llegim l'any
 	local any
 	read -p "Any: " any
 	clear
 	prompt_less_insctructions
 	sleep 5
-	grep ,$any, netflix_unique.csv | cut -d',' -f1,2 | column -t -s "," | less
+	grep ",$any,[0-9]*,[0-9]*$" netflix_unique.csv | cut -d',' -f1,2 | column -t -s "," | less
 }
 
 function estrelles_per_numero() {
