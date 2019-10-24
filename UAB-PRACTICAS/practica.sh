@@ -257,23 +257,18 @@ function llistar_per_rating() {
 			case $option in
 				1)
 					local min_rating=0
-					local max_rating=65
 				;;
 				2)
 					local min_rating=65
-					local max_rating=75
 				;;
 				3)
 					local min_rating=75
-					local max_rating=85
 				;;
 				4)
 					local min_rating=85
-					local max_rating=95
 				;;
 				5)
 					local min_rating=95
-					local max_rating=999
 				;;
 				6)
 					clear
@@ -289,7 +284,7 @@ function llistar_per_rating() {
 			esac
 		done
 
-		local max_rating=999
+		local max_rating=101
 
 		# sortim si on es false
 		# aixo es una guard clause
@@ -302,8 +297,11 @@ function llistar_per_rating() {
 
 		# filtrar
 		local filtered_series=$(filtrar_per_rating "$series" $min_rating $max_rating)
+
+		local sorted_series=$(echo "$filtered_series" | sort -t ',' -n -k3)
+
 		# donar format
-		local formatted_series=$(format_series "$filtered_series")
+		local formatted_series=$(format_series "$sorted_series")
 
 		# mostrar
 		prompt_less_insctructions
