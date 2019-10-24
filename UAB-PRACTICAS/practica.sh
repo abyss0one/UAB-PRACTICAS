@@ -178,6 +178,26 @@ function rating_range_from_stars() {
 	echo $min_rating:$max_rating
 }
 
+function rating_estrelles_from_rating() {
+	local rating="$1"
+
+	if [ $rating -le 65 ];
+	then
+		echo 1
+	elif [ $rating -le 75 ];
+	then
+		echo 2
+	elif [ $rating -le 85 ];
+	then
+		echo 3
+	elif [ $rating -le 95 ];
+	then
+		echo 4
+	else
+		echo 5
+	fi
+}
+
 #Imprimir "Llistar per rating"
 function llistar_per_rating() {
 	local on=true
@@ -235,6 +255,8 @@ function llistar_per_rating() {
 			esac
 		done
 
+		local max_rating=999
+
 		if [ $on = false ];
 		then
 			return 0;
@@ -264,6 +286,7 @@ function llistar_per_rating() {
 			# obtenim els camps desitjats
 			local rating=$(echo $serie | cut -d',' -f3)
 			local title=$(echo $serie | cut -d',' -f1,2)
+			local rating_num=$(rating_estrelles_from_rating $rating)
 			local stars=$(estrelles_per_numero $rating_num)
 			formatted_series="$formatted_series"$'\n'"$stars,$title"
 		done
