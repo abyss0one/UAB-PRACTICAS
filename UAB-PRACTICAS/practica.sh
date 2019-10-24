@@ -397,6 +397,10 @@ function modificar_pref() {
 	done
 }
 
+function clean() {
+	rm netflix_unique.csv
+}
+
 #Escull quina llista utlizar, la modificada(criteris de cerca) o la predeterminada(nomes els arxius unics)
 tail +2 netflix.csv | sort -u > netflix_unique.csv
 
@@ -434,3 +438,5 @@ do
 			sleep 1
 	esac
 done
+
+clean
