@@ -183,62 +183,70 @@ function llistar_per_rating() {
 	local on=true
 	while $on
 	do
-		clear
-		echo "--------------------------------------------------"
-		echo " Llistat per rating"
-		echo "--------------------------------------------------"
-		echo " 1. [     *     ]"
-		echo " 2. [    * *    ]"
-		echo " 3. [   * * *   ]"
-		echo " 4. [  * * * *  ]"
-		echo " 5. [ * * * * * ]"
-		echo " 6. Sortir"
 		local option min_rating max_rating series
+		local valid_option=false
 		series=$(cut -d',' -f1,5,6 netflix_unique.csv)
-		read option
-		case $option in
-			1)
-				local min_rating=0
-				local max_rating=65
-			;;
-			2)
-				local min_rating=65
-				local max_rating=75
-			;;
-			3)
-				local min_rating=75
-				local max_rating=85
-			;;
-			4)
-				local min_rating=85
-				local max_rating=95
-			;;
-			5)
-				local min_rating=95
-				local max_rating=999
-			;;
-			6)
-				clear
-				echo "Sortint"
-				sleep 1
-				local on=false
-			;;
-			*)
-				clear
-				echo "Error: $num2 no és una opció vàlida"
-				sleep 1
-		esac
+		while [ $valid_option = false ]
+		do
+			clear
+			echo "--------------------------------------------------"
+			echo " Llistat per rating"
+			echo "--------------------------------------------------"
+			echo " 1. [     *     ]"
+			echo " 2. [    * *    ]"
+			echo " 3. [   * * *   ]"
+			echo " 4. [  * * * *  ]"
+			echo " 5. [ * * * * * ]"
+			echo " 6. Sortir"
+			valid_option=true
+			read option
+			case $option in
+				1)
+					local min_rating=0
+					local max_rating=65
+				;;
+				2)
+					local min_rating=65
+					local max_rating=75
+				;;
+				3)
+					local min_rating=75
+					local max_rating=85
+				;;
+				4)
+					local min_rating=85
+					local max_rating=95
+				;;
+				5)
+					local min_rating=95
+					local max_rating=999
+				;;
+				6)
+					clear
+					echo "Sortint"
+					sleep 1
+					local on=false
+				;;
+				*)
+					clear
+					valid_option=false
+					echo "Error: $option no és una opció vàlida"
+					sleep 1
+			esac
+		done
 
 		if [ $on = false ];
 		then
 			return 0;
 		fi
 
+		# filtrem per rating
 		local filtered_series=""
 		IFS=$'\n'
 		for serie in $series
 		do
 			local rating=$( echo $serie | cut -d',' -f3 )
+			# el rating ha d'existir
 			if [ ! -z $rating ] && [ $rating -ge $min_rating ] && [ $rating -lt $max_rating ];
 			then
 				filtered_series="$filtered_series"$'\n'"$serie"
@@ -248,15 +256,19 @@ function llistar_per_rating() {
 		series="$filtered_series";
 		local rating_num=$option
 
+		# donar format
 		local formatted_series=""
 		IFS=$'\n'
 		for serie in $series
 		do
+			# obtenim els camps desitjats
 			local rating=$(echo $serie | cut -d',' -f3)
 			local title=$(echo $serie | cut -d',' -f1,2)
 			local stars=$(estrelles_per_numero $rating_num)
 			formatted_series="$formatted_series"$'\n'"$stars,$title"
 		done
+
+		# mostrar
 		prompt_less_insctructions
 		sleep 5
 		echo "$formatted_series" | column -t -s "," | less
