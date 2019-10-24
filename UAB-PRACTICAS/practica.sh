@@ -291,15 +291,19 @@ function llistar_per_rating() {
 
 		local max_rating=999
 
+		# sortim si on es false
+		# aixo es una guard clause
+		# https://en.wikipedia.org/wiki/Guard_(computer_science)
+		# https://www.artansoft.com/2017/01/guard-clauses-definicion-beneficios/
 		if [ $on = false ];
 		then
 			return 0;
 		fi
 
 		# filtrar
-		filtered_series=$(filtrar_per_rating "$series" $min_rating $max_rating)
+		local filtered_series=$(filtrar_per_rating "$series" $min_rating $max_rating)
 		# donar format
-		formatted_series=$(format_series "$filtered_series")
+		local formatted_series=$(format_series "$filtered_series")
 
 		# mostrar
 		prompt_less_insctructions
