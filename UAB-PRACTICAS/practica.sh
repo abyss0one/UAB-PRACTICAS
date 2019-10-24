@@ -68,25 +68,29 @@ function llistar_per_any() {
 	grep ",$any,[0-9]*,[0-9]*$" netflix_unique.csv | cut -d',' -f1,2 | column -t -s "," | less
 }
 
+# genera la cadena d'estrelles a mostrar a partir d'un rating de 1 a 5
 function estrelles_per_numero() {
-	local estrelles=" "
+	# variable acumuladora de la cadena d'estrelles
+	local estrelles=""
+	# calcular quant falta per arribar desde el rating donat a 5
+	# per saber quants espais cal posar davant i derrere
   local remaining=$((5-$1))
+	local padding=""
+	# creem una cadena amb tants espais com calguin
   for i in $( seq 1 $remaining)
 	do
-		estrelles="$estrelles "
+		padding="$padding "
 	done
 
+	# creem una cadena amb (estrelles i espais), s'afegeix una per cada rating donat
+	# una estrella per rating 1, dos per rating 2, etc
 	for i in $( seq 1 $1)
 	do
 		estrelles="$estrelles* "
 	done
 
-  for i in $( seq 1 $remaining)
-  do
-    estrelles="$estrelles "
-  done
-
-	echo "[$estrelles]"
+	# es construeix el resultat final
+	echo "[$padding $estrelles$padding]"
 }
 
 
@@ -131,6 +135,9 @@ function opc_ordre_llista() {
 	echo "$formatted_series" | column -t -s "," | less
 }
 
+# filtrar per rating
+# $1 han de ser les series amb el format <any>,<any>,<rating>, és a dir el rating a la columna 3
+# $2 i $3 han de ser el rating minim i el rating maxim respectivament
 function filtrar_per_rating() {
   local series="$1"
 	local min_rating="$2"
@@ -141,11 +148,35 @@ function filtrar_per_rating() {
 	for serie in $series
 	do
 		local rating=$( echo $serie | cut -d',' -f3 )
+		# es comprova que el rating existeixi
+		# i que estigui entre el minim i el maxim
 		if [ ! -z $rating ] && [ $rating -ge $min_rating ] && [ $rating -lt $max_rating ];
 		then
 			filtered_series="$filtered_series"$'\n'"$serie"
 		fi
 	done
+	echo "$filtered_series"
+}
+
+# donar el format correcte a les series per mostrar-les
+function format_series() {
+	local series="$1"
+	# donar format
+	local formatted_series=""
+	IFS=$'\n'
+	for serie in $series
+	do
+		# obtenim els camps desitjats
+		local rating=$(echo $serie | cut -d',' -f3)
+		local title=$(echo $serie | cut -d',' -f1,2)
+		# obtenim el rating de 1 a 5 a partir del de 0 a 100
+		local rating_num=$(rating_estrelles_from_rating $rating)
+		# obtenim les estrelles a partir del rating de 1 a 5
+		local stars=$(estrelles_per_numero $rating_num)
+		formatted_series="$formatted_series"$'\n'"$stars,$title"
+	done
+
+	echo "$formatted_series"
 }
 
 function rating_range_from_stars() {
@@ -178,19 +209,20 @@ function rating_range_from_stars() {
 	echo $min_rating:$max_rating
 }
 
+# obtenir el rating de 1 a 5 a partir del rating de 0 a 100
 function rating_estrelles_from_rating() {
 	local rating="$1"
 
-	if [ $rating -le 65 ];
+	if [ $rating -lt 65 ];
 	then
 		echo 1
-	elif [ $rating -le 75 ];
+	elif [ $rating -lt 75 ];
 	then
 		echo 2
-	elif [ $rating -le 85 ];
+	elif [ $rating -lt 85 ];
 	then
 		echo 3
-	elif [ $rating -le 95 ];
+	elif [ $rating -lt 95 ];
 	then
 		echo 4
 	else
@@ -220,6 +252,8 @@ function llistar_per_rating() {
 			echo " 6. Sortir"
 			valid_option=true
 			read option
+			# si la opcio esta entre el 1 i el 5, obtenim el rating minim i el maxim
+			# si no, es 6, per tant sortim, o es una opcio incorrecta
 			case $option in
 				1)
 					local min_rating=0
@@ -262,34 +296,10 @@ function llistar_per_rating() {
 			return 0;
 		fi
 
-		# filtrem per rating
-		local filtered_series=""
-		IFS=$'\n'
-		for serie in $series
-		do
-			local rating=$( echo $serie | cut -d',' -f3 )
-			# el rating ha d'existir
-			if [ ! -z $rating ] && [ $rating -ge $min_rating ] && [ $rating -lt $max_rating ];
-			then
-				filtered_series="$filtered_series"$'\n'"$serie"
-			fi
-		done
-
-		series="$filtered_series";
-		local rating_num=$option
-
+		# filtrar
+		filtered_series=$(filtrar_per_rating "$series" $min_rating $max_rating)
 		# donar format
-		local formatted_series=""
-		IFS=$'\n'
-		for serie in $series
-		do
-			# obtenim els camps desitjats
-			local rating=$(echo $serie | cut -d',' -f3)
-			local title=$(echo $serie | cut -d',' -f1,2)
-			local rating_num=$(rating_estrelles_from_rating $rating)
-			local stars=$(estrelles_per_numero $rating_num)
-			formatted_series="$formatted_series"$'\n'"$stars,$title"
-		done
+		formatted_series=$(format_series "$filtered_series")
 
 		# mostrar
 		prompt_less_insctructions
