@@ -171,17 +171,11 @@ function rating_range_from_stars() {
 			local min_rating=95
 			local max_rating=999
 		;;
-		6)
-			clear
-			echo "Sortint"
-			sleep 1
-			local on=false
-		;;
 		*)
-			clear
-			echo "Error: $num2 no es una opcion valida"
-			sleep 1
+			return 1
 	esac
+
+	echo $min_rating:$max_rating
 }
 
 #Imprimir "Llistar per rating"
@@ -231,9 +225,14 @@ function llistar_per_rating() {
 			;;
 			*)
 				clear
-				echo "Error: $num2 no es una opcion valida"
+				echo "Error: $num2 no és una opció vàlida"
 				sleep 1
 		esac
+
+		if [ $on = false ];
+		then
+			return 0;
+		fi
 
 		local filtered_series=""
 		IFS=$'\n'
@@ -246,7 +245,21 @@ function llistar_per_rating() {
 			fi
 		done
 
-		opc_ordre_llista "$filtered_series" "$option"
+		series="$filtered_series";
+		local rating_num=$option
+
+		local formatted_series=""
+		IFS=$'\n'
+		for serie in $series
+		do
+			local rating=$(echo $serie | cut -d',' -f3)
+			local title=$(echo $serie | cut -d',' -f1,2)
+			local stars=$(estrelles_per_numero $rating_num)
+			formatted_series="$formatted_series"$'\n'"$stars,$title"
+		done
+		prompt_less_insctructions
+		sleep 5
+		echo "$formatted_series" | column -t -s "," | less
 	done
 }
 
