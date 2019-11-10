@@ -386,12 +386,14 @@ function modificar_preferencies() {
 }
 
 function eliminar_preferencies() {
+	clear
 	rm preferencies 2> /dev/null
 	echo "Preferències eliminades"
 	sleep 3
 }
 
 function mostrar_preferencies() {
+	clear
 	# controlem si no existeixen les preferencies
 	if [ ! -f "preferencies" ]; then
 		echo "Encara no hi ha preferències."
