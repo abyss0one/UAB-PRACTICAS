@@ -27,11 +27,18 @@ function prompt_less_insctructions() {
 #Imprimir "Recomanació ràpida"
 function recomanacio_rapida() {
 	clear
+
+	local fitxer='netflix_unique.csv'
+
+	if [ -f "preferencies" ]; then
+		fitxer='filtrat_preferencies.csv'
+	fi
+
 	# escollir número aleatori entre 1 i la longitud del fitxer
-	local index=$(( $RANDOM % $(wc -l < netflix_unique.csv) + 1 ))
+	local index=$(( $RANDOM % $(wc -l < $fitxer) + 1 ))
 
 	# obtenir la fila a l'index escollit
-	local row=$( tail -$index netflix_unique.csv | head -1 )
+	local row=$( tail -$index $fitxer | head -1 )
 
 	# extreure els camps de la fila
 	local nom=$( echo $row | cut -d',' -f1 )
@@ -312,8 +319,8 @@ function llistar_per_rating() {
 
 #
 function criteris_de_cerca() {
-	on3=true
-	while $on3
+	local on=true
+	while $on
 	do
 		clear
 		echo "--------------------------------------------------"
@@ -323,16 +330,17 @@ function criteris_de_cerca() {
 		echo " 2. Eliminar preferències"
 		echo " 3. Preferències actuals"
 		echo " 4. Sortir"
+		local opc
 		read opc
 		case $opc in
 			1)
-				modificar_pref
+				modificar_preferencies
 			;;
 			2)
-				tail +2 netflix.csv | sort -u > netflix_unique.csv
-				echo 0 > pref.txt
+				rm preferencies
 			;;
 			3)
+			mostrar_preferencies
 			;;
 			4)
 				clear
@@ -345,58 +353,32 @@ function criteris_de_cerca() {
 	done
 }
 
-function modificar_pref() {
+function modificar_preferencies() {
 	clear
-	on4=true
-	while $on4 in
-	do
-		echo "Modificar :"
-		echo "1. Any"
-		echo "2. Rating"
-		echo "3. Estrelles"
-		echo "4. Sortir"
-		read opc
-		case $opc in
-			1)
-				clear
-				cat netflix_unique.csv > datosPref.txt
-				cat netflix_unique.csv > netflix_unique.csv
-				read -p "Des de : " any1
-				read -p "Fins a : " any2
-				while [ $any1 -le $any2 ]
-				do
-					grep ,$any1, datosPref.txt >> netflix_unique.csv
-					any1=$(($any1+1))
-				done
-				echo 1 > pref.txt
-				less netflix_unique.csv
-				clear
-			;;
-			2)
-				clear
-				cat netflix_unique.csv > datosPref.txt
-				cat netflix_unique.csv > netflix_unique.csv
-				echo "[PG-13, R, TV-14, TV-PG, TV-MA, TV-Y, NR, TV-Y7-FV,UR,G]"
-				read -p "Escriu els ratings que vulguis separats per un espai : " ratings
-				for rat in $ratings
-				do
-					egrep ,$rat, datosPref.txt >> netflix_unique.csv
-				done
-				echo 1 > pref.txt
-				less netflix_unique.csv
-				clear
-			;;
-			3)
-			;;
-			4)
-				clear
-				echo "Sortint"
-				sleep 1
-				on4=false
-			;;
-			*)
-		esac
-	done
+	echo "Modificar Any"
+	echo "Introdueix els anys separats per comes sense espais."
+	local anys
+	read anys
+
+	echo "Modificar Ratings"
+	echo "Introdueix els ratings separats per comes sense espais."
+	echo "Els ratings disponibles són: PG-13, R, TV-14, TV-PG, TV-MA, TV-Y, NR, TV-Y7-FV, UR, G"
+	local ratings
+	read ratings
+
+	echo "Modificar Stars"
+	echo "Introdueix el valor entre l'1 i el 5 (ambdos incolsos)"
+	local stars
+	read stars
+
+	echo -e "$anys\n$ratings\n$stars" > preferencies
+
+	echo "Preferencies modificades"
+}
+
+function mostrar_preferencies() {
+	local preferencies=$(cat preferencies)
+
 }
 
 function clean() {
