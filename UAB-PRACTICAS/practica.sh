@@ -362,6 +362,7 @@ function criteris_de_cerca() {
 
 function modificar_preferencies() {
 	clear
+	echo "Si deixes l'espai d'un apartat en blanc, no s'aplicara com a criteri."$'\n'
 	echo "Modificar Any"
 	echo "Introdueix els anys separats per comes sense espais."
 	local anys=$(head -1 preferencies 2> /dev/null || echo "")
