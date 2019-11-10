@@ -337,16 +337,16 @@ function criteris_de_cerca() {
 				modificar_preferencies
 			;;
 			2)
-				rm preferencies
+				eliminar_preferencies
 			;;
 			3)
-			mostrar_preferencies
+				mostrar_preferencies
 			;;
 			4)
 				clear
 				echo "Sortint"
 				sleep 1
-				on3=false
+				on=false
 			;;
 			*)
 		esac
@@ -357,28 +357,41 @@ function modificar_preferencies() {
 	clear
 	echo "Modificar Any"
 	echo "Introdueix els anys separats per comes sense espais."
-	local anys
-	read anys
+	local anys=$(head -1 preferencies 2> /dev/null || echo "")
+	read -e -i "$anys" anys
 
 	echo "Modificar Ratings"
 	echo "Introdueix els ratings separats per comes sense espais."
 	echo "Els ratings disponibles són: PG-13, R, TV-14, TV-PG, TV-MA, TV-Y, NR, TV-Y7-FV, UR, G"
-	local ratings
-	read ratings
+	local ratings=$(head -2 preferencies 2> /dev/null | tail -1 2> /dev/null || echo "")
+	read -e -i "$ratings" ratings
 
 	echo "Modificar Stars"
 	echo "Introdueix el valor entre l'1 i el 5 (ambdos incolsos)"
-	local stars
-	read stars
+	local stars=$(head -3 preferencies 2> /dev/null | tail -1 2> /dev/null || echo "")
+	read -e -i "$stars" stars
 
 	echo -e "$anys\n$ratings\n$stars" > preferencies
 
 	echo "Preferencies modificades"
 }
 
-function mostrar_preferencies() {
-	local preferencies=$(cat preferencies)
+function eliminar_preferencies() {
+	rm preferencies 2> /dev/null
+	echo "Preferències eliminades"
+	sleep 3
+}
 
+function mostrar_preferencies() {
+	if [ ! -f "preferencies" ]; then
+		echo "Encara no hi ha preferències."
+		sleep 3
+		return 0;
+	fi
+
+	local preferencies=$(cat preferencies)
+	echo "$preferencies"
+	sleep 3
 }
 
 function clean() {
