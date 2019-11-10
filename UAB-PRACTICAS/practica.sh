@@ -419,41 +419,54 @@ function aplicar_preferencies() {
 		local serie_rating=$( echo $serie | cut -d',' -f2 )
 		local serie_user_rating=$( echo $serie | cut -d',' -f6 )
 
-		# ignorar les series que no tinguin rating
-		if [ -z $serie_user_rating ]; then
-			IFS=$'\n'
-			continue
-		fi
-
-		local serie_stars=$(rating_estrelles_from_rating $serie_user_rating)
-
 		local any_valid=false
 		local rating_valid=false
 		local stars_valid=false
 		IFS=,
-		for any in $anys
-		do
-			if [ "$any" -eq "$serie_any" ]; then
-				any_valid=true
-				break
-			fi
-		done
 
-		for rating in $ratings
-		do
-			if [ "$rating" = "$serie_rating" ]; then
-				rating_valid=true
-				break
-			fi
-		done
+		if [ "$anys" = "" ]; then
+			any_valid=true
+		else
+			for any in $anys
+			do
+				if [ "$any" -eq "$serie_any" ]; then
+					any_valid=true
+					break
+				fi
+			done
+		fi
 
-		for star in $stars
-		do
-			if [ "$star" -eq "$serie_stars" ]; then
-				stars_valid=true
-				break
+		if [ "$ratings" = "" ]; then
+			rating_valid=true
+		else
+			# ignorar les series que no tinguin rating
+			if [ -z $serie_user_rating ]; then
+				IFS=$'\n'
+				continue
 			fi
-		done
+
+			local serie_stars=$(rating_estrelles_from_rating $serie_user_rating)
+
+			for rating in $ratings
+			do
+				if [ "$rating" = "$serie_rating" ]; then
+					rating_valid=true
+					break
+				fi
+			done
+		fi
+
+		if [ "$stars" = "" ]; then
+			stars_valid=true
+		else
+			for star in $stars
+			do
+				if [ "$star" -eq "$serie_stars" ]; then
+					stars_valid=true
+					break
+				fi
+			done
+		fi
 
 		if [ "$any_valid" = "true" ] && [ "$rating_valid" = "true" ] && [ "$stars_valid" = "true" ]; then
 			filtered_series="$filtered_series""$serie"$'\n'
