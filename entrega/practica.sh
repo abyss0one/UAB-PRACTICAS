@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #A netflix_unique.csv estan guardats els noms unics de l'arxiu netflix.csv
 #datos.txt es un arxiu que guarda informació temporal
 #Imprimir el menu en pantalla
