@@ -34,6 +34,12 @@ function recomanacio_rapida() {
 		fitxer='filtrat_preferencies.csv'
 	fi
 
+	if [ ! -s "$fitxer" ]; then
+		echo "No hi ha series que coincideixin amb les teves preferències"
+		sleep 2
+		return 0
+	fi
+
 	# escollir número aleatori entre 1 i la longitud del fitxer
 	local index=$(( $RANDOM % $(wc -l < $fitxer) + 1 ))
 
@@ -368,7 +374,7 @@ function modificar_preferencies() {
 	read -e -i "$ratings" ratings
 
 	echo "Modificar Stars"
-	echo "Introdueix el valor entre l'1 i el 5 (ambdos incolsos)"
+	echo "Introdueix el valor entre l'1 i el 5 (ambdós inclosos)"
 	local stars=$(head -3 preferencies 2> /dev/null | tail -1 2> /dev/null || echo "")
 	read -e -i "$stars" stars
 
@@ -398,6 +404,8 @@ function mostrar_preferencies() {
 }
 
 function aplicar_preferencies() {
+	echo "Aplicant preferències..."
+
 	local anys=$(head -1 preferencies)
 	local ratings=$(head -2 preferencies | tail -1)
 	local stars=$(head -3 preferencies | tail -1)
@@ -448,7 +456,7 @@ function aplicar_preferencies() {
 		done
 
 		if [ "$any_valid" = "true" ] && [ "$rating_valid" = "true" ] && [ "$stars_valid" = "true" ]; then
-			filtered_series="$filtered_series"$'\n'"$serie"
+			filtered_series="$filtered_series""$serie"$'\n'
 		fi
 
 		IFS=$'\n'
@@ -460,11 +468,12 @@ function aplicar_preferencies() {
 		echo "No s'han trobat series per aquestes preferències."
 	fi
 
-	echo "$filtered_series" > 'filtrat_preferencies.csv'
+	echo -n "$filtered_series" > 'filtrat_preferencies.csv'
 }
 
 function clean() {
-	rm netflix_unique.csv
+	rm netflix_unique.csv 2> /dev/null
+	rm filtrat_preferencies.csv 2> /dev/null
 }
 
 #Escull quina llista utlizar, la modificada(criteris de cerca) o la predeterminada(nomes els arxius unics)
