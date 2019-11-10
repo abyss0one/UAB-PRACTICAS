@@ -30,10 +30,13 @@ function recomanacio_rapida() {
 
 	local fitxer='netflix_unique.csv'
 
+	# si hi ha preferencies que utilitzi el fitxer de series filtrades per preferencies
 	if [ -f "preferencies" ]; then
 		fitxer='filtrat_preferencies.csv'
 	fi
 
+	# si el fitxer esta buit (-s dona true si el fitxer te un tamany 0)
+	# avisa a l'usuari i acaba la funcio
 	if [ ! -s "$fitxer" ]; then
 		echo "No hi ha series que coincideixin amb les teves preferències"
 		sleep 2
@@ -106,48 +109,6 @@ function estrelles_per_numero() {
 	echo "[$padding $estrelles$padding]"
 }
 
-
-#Conseguir el programa/peli
-function opc_ordre_llista() {
-	local series="$1"
-	local rating_num="$2"
-
-	clear
-	echo "1. Ordenar de major a menor"
-	echo "2. Ordenar de menor a major"
-	local option
-	read option
-
-	if [ "$option" -ne "1" ] && [ "$option" -ne "2" ];
-	then
-		#clear
-		echo "Error: $option no es una opcion valida"
-		sleep 5
-		return 1
-	fi
-
-	if [ "$option" -eq "1" ];
-	then
-		series=$(echo "$series" | sort -k3 -nr -t',')
-	else
-		series=$(echo "$series" | sort -k3 -n -t',')
-	fi
-
-	clear
-	local formatted_series=""
-	IFS=$'\n'
-	for serie in $series
-	do
-		local rating=$(echo $serie | cut -d',' -f3)
-		local title=$(echo $serie | cut -d',' -f1,2)
-		local stars=$(estrelles_per_numero $rating_num)
-		formatted_series="$formatted_series"$'\n'"$stars,$title"
-	done
-	prompt_less_insctructions
-	sleep 5
-	echo "$formatted_series" | column -t -s "," | less
-}
-
 # filtrar per rating
 # $1 han de ser les series amb el format <any>,<any>,<rating>, és a dir el rating a la columna 3
 # $2 i $3 han de ser el rating minim i el rating maxim respectivament
@@ -190,36 +151,6 @@ function format_series() {
 	done
 
 	echo "$formatted_series"
-}
-
-function rating_range_from_stars() {
-	local stars="$1"
-	case $option in
-		1)
-			local min_rating=0
-			local max_rating=65
-		;;
-		2)
-			local min_rating=65
-			local max_rating=75
-		;;
-		3)
-			local min_rating=75
-			local max_rating=85
-		;;
-		4)
-			local min_rating=85
-			local max_rating=95
-		;;
-		5)
-			local min_rating=95
-			local max_rating=999
-		;;
-		*)
-			return 1
-	esac
-
-	echo $min_rating:$max_rating
 }
 
 # obtenir el rating de 1 a 5 a partir del rating de 0 a 100
