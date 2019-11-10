@@ -367,12 +367,14 @@ function modificar_preferencies() {
 	local anys=$(head -1 preferencies 2> /dev/null || echo "")
 	read -e -i "$anys" anys
 
+	clear
 	echo "Modificar Ratings"
 	echo "Introdueix els ratings separats per comes sense espais."
 	echo "Els ratings disponibles són: PG-13, R, TV-14, TV-PG, TV-MA, TV-Y, NR, TV-Y7-FV, UR, G"
 	local ratings=$(head -2 preferencies 2> /dev/null | tail -1 2> /dev/null || echo "")
 	read -e -i "$ratings" ratings
 
+	clear
 	echo "Modificar Stars"
 	echo "Introdueix el valor entre l'1 i el 5 (ambdós inclosos)"
 	local stars=$(head -3 preferencies 2> /dev/null | tail -1 2> /dev/null || echo "")
@@ -390,15 +392,19 @@ function eliminar_preferencies() {
 }
 
 function mostrar_preferencies() {
+	# controlem si no existeixen les preferencies
 	if [ ! -f "preferencies" ]; then
 		echo "Encara no hi ha preferències."
 		sleep 3
 		return 0;
 	fi
 
+	# llegim les preferencies
 	local anys=$(head -1 preferencies)
 	local ratings=$(head -2 preferencies | tail -1)
 	local stars=$(head -3 preferencies | tail -1)
+
+	# mostrem les preferencies
 	echo -e "Anys: $anys\nRatings: $ratings\nStars: $stars"
 	sleep 3
 }
@@ -406,27 +412,38 @@ function mostrar_preferencies() {
 function aplicar_preferencies() {
 	echo "Aplicant preferències..."
 
+	# recuperem les preferencies
 	local anys=$(head -1 preferencies)
 	local ratings=$(head -2 preferencies | tail -1)
 	local stars=$(head -3 preferencies | tail -1)
 
+	# recuperem les series del fitxer de series sense duplicats
 	local series=$(cat netflix_unique.csv)
+
 	local filtered_series=""
 	IFS=$'\n'
+	# per cada serie
 	for serie in $series
 	do
+		# afafem els camps any, rating i user_rating
 		local serie_any=$( echo $serie | cut -d',' -f5 )
 		local serie_rating=$( echo $serie | cut -d',' -f2 )
 		local serie_user_rating=$( echo $serie | cut -d',' -f6 )
 
+		# aquestes variables indiquen si la serie compleix els requisits
+		# per defecte no els compleix
 		local any_valid=false
 		local rating_valid=false
 		local stars_valid=false
+
 		IFS=,
 
+		# si la preferencia d'anys no esta especificada
+		# permetem que agafi tots els anys
 		if [ "$anys" = "" ]; then
 			any_valid=true
 		else
+			# mirem que l'any de la serie coincideixi amb un dels anys de les preferencies
 			for any in $anys
 			do
 				if [ "$any" -eq "$serie_any" ]; then
@@ -436,17 +453,12 @@ function aplicar_preferencies() {
 			done
 		fi
 
+		# si la preferencia de ratings no esta especificada
+		# permetem que agafi tots els ratings
 		if [ "$ratings" = "" ]; then
 			rating_valid=true
 		else
-			# ignorar les series que no tinguin rating
-			if [ -z $serie_user_rating ]; then
-				IFS=$'\n'
-				continue
-			fi
-
-			local serie_stars=$(rating_estrelles_from_rating $serie_user_rating)
-
+			# mirem que el rating sigui a les preferencies
 			for rating in $ratings
 			do
 				if [ "$rating" = "$serie_rating" ]; then
@@ -459,6 +471,15 @@ function aplicar_preferencies() {
 		if [ "$stars" = "" ]; then
 			stars_valid=true
 		else
+			# ignorar les series que no tinguin user_rating
+			if [ -z $serie_user_rating ]; then
+				IFS=$'\n'
+				continue
+			fi
+			# agafem el rating d'estrelles a partir del user_rating
+			local serie_stars=$(rating_estrelles_from_rating $serie_user_rating)
+
+			# mirem que el rating d'estrelles sigui a les preferències
 			for star in $stars
 			do
 				if [ "$star" -eq "$serie_stars" ]; then
@@ -468,6 +489,7 @@ function aplicar_preferencies() {
 			done
 		fi
 
+		# si compleix les 3 condicions, afegim la serie a un acumulador
 		if [ "$any_valid" = "true" ] && [ "$rating_valid" = "true" ] && [ "$stars_valid" = "true" ]; then
 			filtered_series="$filtered_series""$serie"$'\n'
 		fi
@@ -475,12 +497,12 @@ function aplicar_preferencies() {
 		IFS=$'\n'
 	done
 
-	read -p "aaaaa" a
-
+	# si no s'han trobat series ho avisem
 	if [ "$filtered_series" = "" ]; then
 		echo "No s'han trobat series per aquestes preferències."
 	fi
 
+	# guardem les series filtrades
 	echo -n "$filtered_series" > 'filtrat_preferencies.csv'
 }
 
