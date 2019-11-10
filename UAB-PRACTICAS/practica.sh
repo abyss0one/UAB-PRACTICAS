@@ -362,12 +362,14 @@ function criteris_de_cerca() {
 
 function modificar_preferencies() {
 	clear
+	echo "Si deixes l'espai en blanc, no s'aplicara com a criteri."$'\n'
 	echo "Modificar Any"
 	echo "Introdueix els anys separats per comes sense espais."
 	local anys=$(head -1 preferencies 2> /dev/null || echo "")
 	read -e -i "$anys" anys
 
 	clear
+	echo "Si deixes l'espai en blanc, no s'aplicara com a criteri."$'\n'
 	echo "Modificar Ratings"
 	echo "Introdueix els ratings separats per comes sense espais."
 	echo "Els ratings disponibles són: PG-13, R, TV-14, TV-PG, TV-MA, TV-Y, NR, TV-Y7-FV, UR, G"
@@ -375,6 +377,7 @@ function modificar_preferencies() {
 	read -e -i "$ratings" ratings
 
 	clear
+	echo "Si deixes l'espai en blanc, no s'aplicara com a criteri."$'\n'
 	echo "Modificar Stars"
 	echo "Introdueix el valor entre l'1 i el 5 (ambdós inclosos)"
 	local stars=$(head -3 preferencies 2> /dev/null | tail -1 2> /dev/null || echo "")
