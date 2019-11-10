@@ -335,6 +335,7 @@ function criteris_de_cerca() {
 		case $opc in
 			1)
 				modificar_preferencies
+				aplicar_preferencies
 			;;
 			2)
 				eliminar_preferencies
@@ -389,9 +390,77 @@ function mostrar_preferencies() {
 		return 0;
 	fi
 
-	local preferencies=$(cat preferencies)
-	echo "$preferencies"
+	local anys=$(head -1 preferencies)
+	local ratings=$(head -2 preferencies | tail -1)
+	local stars=$(head -3 preferencies | tail -1)
+	echo -e "Anys: $anys\nRatings: $ratings\nStars: $stars"
 	sleep 3
+}
+
+function aplicar_preferencies() {
+	local anys=$(head -1 preferencies)
+	local ratings=$(head -2 preferencies | tail -1)
+	local stars=$(head -3 preferencies | tail -1)
+
+	local series=$(cat netflix_unique.csv)
+	local filtered_series=""
+	IFS=$'\n'
+	for serie in $series
+	do
+		local serie_any=$( echo $serie | cut -d',' -f5 )
+		local serie_rating=$( echo $serie | cut -d',' -f2 )
+		local serie_user_rating=$( echo $serie | cut -d',' -f6 )
+
+		# ignorar les series que no tinguin rating
+		if [ -z $serie_user_rating ]; then
+			IFS=$'\n'
+			continue
+		fi
+
+		local serie_stars=$(rating_estrelles_from_rating $serie_user_rating)
+
+		local any_valid=false
+		local rating_valid=false
+		local stars_valid=false
+		IFS=,
+		for any in $anys
+		do
+			if [ "$any" -eq "$serie_any" ]; then
+				any_valid=true
+				break
+			fi
+		done
+
+		for rating in $ratings
+		do
+			if [ "$rating" = "$serie_rating" ]; then
+				rating_valid=true
+				break
+			fi
+		done
+
+		for star in $stars
+		do
+			if [ "$star" -eq "$serie_stars" ]; then
+				stars_valid=true
+				break
+			fi
+		done
+
+		if [ "$any_valid" = "true" ] && [ "$rating_valid" = "true" ] && [ "$stars_valid" = "true" ]; then
+			filtered_series="$filtered_series"$'\n'"$serie"
+		fi
+
+		IFS=$'\n'
+	done
+
+	read -p "aaaaa" a
+
+	if [ "$filtered_series" = "" ]; then
+		echo "No s'han trobat series per aquestes preferències."
+	fi
+
+	echo "$filtered_series" > 'filtrat_preferencies.csv'
 }
 
 function clean() {
@@ -400,6 +469,10 @@ function clean() {
 
 #Escull quina llista utlizar, la modificada(criteris de cerca) o la predeterminada(nomes els arxius unics)
 tail +2 netflix.csv | sort -u > netflix_unique.csv
+
+if [ -f "preferencies" ]; then
+	aplicar_preferencies
+fi
 
 #Bucle principal
 #La variable on ens fa entrar i sortir del bucle while
